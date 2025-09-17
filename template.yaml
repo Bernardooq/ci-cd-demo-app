@@ -1,12 +1,11 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: >
-  Infraestructura EC2 para demo CI/CD con CodeDeploy
+Description: Infraestructura EC2 para demo CI/CD con CodeDeploy
 
 Parameters:
   KeyName:
     Type: AWS::EC2::KeyPair::KeyName
     Default: default-key
-    Description: Nombre del par de llaves para conectarse a la instancia
+    Description: Par de llaves
 
   InstanceType:
     Type: String
@@ -32,27 +31,29 @@ Resources:
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
-      Roles: [  !Ref InstanceRole ]
+      Roles:
+        - !Ref InstanceRole
 
   SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: SG demo - permite tráfico HTTP en 8080
-      VpcId: vpc-xxxxxxxx   # ⚠️ reemplaza con tu VPC real
+      GroupDescription: SG demo - permite tráfico HTTP en 80
+      VpcId: vpc-0e4132effa6187810   # <<-- reemplaza por tu VPC
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: 8080
-          ToPort: 8080
+          FromPort: 80
+          ToPort: 80
           CidrIp: 0.0.0.0/0
 
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
       IamInstanceProfile: !Ref InstanceProfile
-      ImageId: ami-xxxxxxxx   # ⚠️ reemplaza con Amazon Linux 2 actual de tu región
+      ImageId: ami-08982f1c5bf93d976 # Amazon Linux 2 (us-east-1)
       InstanceType: !Ref InstanceType
       KeyName: !Ref KeyName
-      SecurityGroupIds: [ !Ref SecurityGroup ]
+      SecurityGroupIds:
+        - !Ref SecurityGroup
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
