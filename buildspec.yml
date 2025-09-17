@@ -2,24 +2,15 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      python: 3.9
     commands:
       - echo "Instalando dependencias..."
+      - pip install --upgrade pip
       - pip install -r requirements.txt
-
-  pre_build:
-    commands:
-      - echo "Fase pre_build, sin acciones por ahora"
 
   build:
     commands:
       - echo "Ejecutando pruebas..."
       - pytest tests/
-
-  post_build:
-    commands:
-      - echo "Fase post_build, sin acciones por ahora"
 
 artifacts:
   files:
